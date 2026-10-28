@@ -1,7 +1,12 @@
 from pymongo import MongoClient
+from Lancer_jeux import *
 
 client = MongoClient("mongodb://localhost:27017/")
 db = client["Game"]
+
+jeu = Jeux()
+jeu.choix_equipe(list(db["roles"].find()))
+jeu.combat(list(db["monstres"].find()))
 
 
 """
