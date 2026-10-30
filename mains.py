@@ -1,45 +1,41 @@
 from pymongo import MongoClient
-from Lancer_jeux import *
+from Lancer_jeux import Jeux
 
 client = MongoClient("mongodb://localhost:27017/")
 db = client["Game"]
 
-jeu = Jeux()
-jeu.choix_equipe(list(db["roles"].find()))
-jeu.combat(list(db["monstres"].find()))
+roles = list(db["roles"].find())
+monstres = list(db["monstre"].find())
 
 
-"""
-# MENU = [
-#   "Lancer Jeu",
-#   "Afficher les scores",
-#   "Quitter",
-#    ]
-# Menu
-#   Boucle sur tout element de MENU
-#       afficher numero element et texte element
-# Choix (options, erreur)
-#    while True:
-#        Recuperer choix utilisateur
-#        Verifier si choix est valide
-#        Si valide
-#             return choix
-#        Sinon
-#             Lancer fonction erreur
-# Process
+MENU = [
+    "Lancer Jeu",
+    "Afficher les scores",
+    "Quitter",
+]
 
 
-#    Afficher les scores
-#        Recuperer scores base
-#            ouvrir base
-#            acceder a collection score
-#            find
-#            convertir curseur en list
-#        filtrer les 3 meilleurs
-#             trie le tableau sur element.waves
-#             prendre 3 derniers elements
-#                    array[-3:-1]
-#        Affiche les score
-#    Quitter
-#       sys.exit()
-"""
+def afficher_menu():
+    for numero, texte in enumerate(MENU, start=1):
+        print(f"{numero}. {texte}")
+
+
+def erreur():
+    print("Choix invalide, réessaie.")
+
+
+def choix():
+    while True:
+        saisie = input("Ton choix : ")
+        if saisie.isdigit() and 1 <= int(saisie) <= len(MENU):
+            return int(saisie)
+        else:
+            erreur()
+
+
+afficher_menu()
+reponse = choix()
+print(f"Tu as choisi : {MENU[reponse - 1]}")
+
+jeu = Jeux(monstres, roles)   
+jeu.lancer()                  
